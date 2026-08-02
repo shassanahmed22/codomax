@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inkwell — a small blog for slow thoughts</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
+
+    <header class="masthead">
+        <div class="wrap masthead-inner">
+            <a href="index.html" class="brand">Inkwell<span style="color:var(--accent-2)">.</span></a>
+            <nav class="primary-nav">
+                <a href="index.html" class="active">
+                    <span class="ink-mark">Home
+                        <svg viewBox="0 0 60 10" preserveAspectRatio="none">
+                            <path d="M2 6 Q 15 2, 30 6 T 58 5" />
+                        </svg>
+                    </span>
+                </a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="create-blog.html">Write</a>
+            </nav>
+            <div id="nav-auth-slot"></div>
+        </div>
+    </header>
+
+    <main>
+        <div class="wrap">
+
+            <section class="hero">
+                <div>
+                    <p class="eyebrow">Volume 01 — Field notes</p>
+                    <h1>Slow, specific writing<br>for people who make things.</h1>
+                    <p class="lede">Inkwell is a small publishing space for process notes, half-finished
+                        ideas, and the occasional finished essay. No feed algorithm — just posts, in order,
+                        written by people you can put a name to.</p>
+                </div>
+                <dl class="hero-side">
+                    <dt>Currently publishing</dt>
+                    <dd id="stat-published">—</dd>
+                    <dt>Contributors</dt>
+                    <dd id="stat-authors">—</dd>
+                    <dt>Latest entry</dt>
+                    <dd id="stat-latest">—</dd>
+                </dl>
+            </section>
+
+            <div class="section-head">
+                <h2>Latest entries</h2>
+                <a href="create-blog.html" class="btn btn-ghost">+ New post</a>
+            </div>
+
+            <div class="post-grid" id="post-grid"></div>
+
+        </div>
+    </main>
+
+    <footer class="site-foot">
+        <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:10px;">
+            <span>Inkwell — a Module 2 frontend build</span>
+            <span>Home · Login · Register · Dashboard · Write</span>
+        </div>
+    </footer>
+
+    <script src="assets/app.js"></script>
+    <script>
+        function excerpt(text, n = 130) {
+            return text.length > n ? text.slice(0, n).trim() + '…' : text;
+        }
+
+        function render() {
+            const grid = document.getElementById('post-grid');
+            const posts = Posts.published();
+
+            document.getElementById('stat-published').textContent = posts.length + (posts.length === 1 ? ' post' : ' posts');
+            const authorCount = new Set(posts.map(p => p.authorId)).size;
+            document.getElementById('stat-authors').textContent = authorCount || '—';
+            document.getElementById('stat-latest').textContent = posts[0] ? formatDate(posts[0].createdAt) : '—';
+
+            if (posts.length === 0) {
+                grid.innerHTML = `
+        <div class="empty-state" style="grid-column:1/-1">
+          <h3>Nothing published yet</h3>
+          <p>Be the first to <a href="create-blog.html" style="color:var(--accent-ink); font-weight:600;">write something</a>.</p>
+        </div>`;
+                return;
+            }
+
+            grid.innerHTML = posts.map(p => `
+      <article class="post-card">
+        <div class="post-meta">
+          <span class="tag">${escapeHTML(p.tag || 'general')}</span>
+          <span>${formatDate(p.createdAt)}</span>
+        </div>
+        <h3>${escapeHTML(p.title)}</h3>
+        <p class="post-excerpt">${escapeHTML(excerpt(p.body))}</p>
+        <div class="card-foot">
+          <span>by ${escapeHTML(p.authorName)}</span>
+        </div>
+      </article>
+    `).join('');
+        }
+
+        render();
+    </script>
+</body>
+
+</html>
