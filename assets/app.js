@@ -1,17 +1,9 @@
-/* =========================================================
-   Inkwell — shared app logic
-   Everything is stored client-side in localStorage. This is a
-   Module 2 (frontend-only) build: no server, no real security —
-   it exists so the UI has real data to work with.
-   ========================================================= */
-
 const DB = {
     USERS: 'inkwell_users',
     SESSION: 'inkwell_session',
     POSTS: 'inkwell_posts',
 };
 
-/* ---------- tiny helpers ---------- */
 function readJSON(key, fallback) {
     try {
         const raw = localStorage.getItem(key);
@@ -39,7 +31,6 @@ function initials(name) {
     return (name || '?').trim().slice(0, 1).toUpperCase();
 }
 
-/* ---------- seed data (first run only) ---------- */
 function seedIfEmpty() {
     const users = readJSON(DB.USERS, null);
     if (!users) {
@@ -85,7 +76,6 @@ function seedIfEmpty() {
 }
 seedIfEmpty();
 
-/* ---------- auth ---------- */
 const Auth = {
     currentUser() {
         const session = readJSON(DB.SESSION, null);
@@ -118,7 +108,6 @@ const Auth = {
     },
 };
 
-/* ---------- posts ---------- */
 const Posts = {
     all() {
         return readJSON(DB.POSTS, []);
@@ -154,7 +143,6 @@ const Posts = {
     },
 };
 
-/* ---------- nav rendering (runs on every page) ---------- */
 function renderNav() {
     const slot = document.getElementById('nav-auth-slot');
     if (!slot) return;
@@ -177,7 +165,6 @@ function renderNav() {
     }
 }
 
-/* Redirect guard for pages that require a session */
 function requireAuth() {
     if (!Auth.currentUser()) {
         window.location.href = 'login.html?next=' + encodeURIComponent(window.location.pathname.split('/').pop());
