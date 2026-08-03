@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create an account — Inkwell</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
+
+    <header class="masthead">
+        <div class="wrap masthead-inner">
+            <a href="index.html" class="brand">Inkwell<span style="color:var(--accent-2)">.</span></a>
+            <nav class="primary-nav">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="create-blog.html">Write</a>
+            </nav>
+            <div id="nav-auth-slot"></div>
+        </div>
+    </header>
+
+    <main>
+        <div class="wrap" style="max-width:960px;">
+            <div class="auth-shell">
+                <div class="auth-panel">
+                    <p class="eyebrow" style="color:var(--accent-2)">Join Inkwell</p>
+                    <blockquote class="auth-quote">
+                        "Publish before you're ready. Editing is easier than imagining."
+                        <cite>— a note to first-time writers</cite>
+                    </blockquote>
+                    <div class="hero-side" style="border-left:none; padding-left:0; color:rgba(238,240,233,0.6);">
+                        Already have an account? <a href="login.html"
+                            style="color:var(--accent-2); text-decoration:underline;">Sign in</a> instead.
+                    </div>
+                </div>
+
+                <div class="auth-form-side">
+                    <p class="eyebrow">Register</p>
+                    <h1>Start your first draft.</h1>
+                    <p class="auth-sub">Takes under a minute — no email confirmation required.</p>
+
+                    <div id="form-banner"></div>
+
+                    <form id="register-form" novalidate>
+                        <div class="field" id="field-name">
+                            <label for="name">Full name</label>
+                            <input type="text" id="name" name="name" placeholder="Jordan Ali" autocomplete="name">
+                            <div class="error">Enter your name.</div>
+                        </div>
+                        <div class="field" id="field-email">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="you@example.com"
+                                autocomplete="email">
+                            <div class="error">Enter a valid email address.</div>
+                        </div>
+                        <div class="field" id="field-password">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="At least 6 characters"
+                                autocomplete="new-password">
+                            <div class="error">Password must be at least 6 characters.</div>
+                        </div>
+                        <div class="field" id="field-confirm">
+                            <label for="confirm">Confirm password</label>
+                            <input type="password" id="confirm" name="confirm" placeholder="Repeat password"
+                                autocomplete="new-password">
+                            <div class="error">Passwords don't match.</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%;">Create account</button>
+                        <p class="form-foot">Already registered? <a href="login.html">Sign in</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-foot">
+        <div class="wrap" style="display:flex; justify-content:space-between; width:100%;">
+            <span>Inkwell — a Module 2 frontend build</span>
+            <span>Home · Login · Register · Dashboard · Write</span>
+        </div>
+    </footer>
+
+    <script src="assets/app.js"></script>
+    <script>
+        const form = document.getElementById('register-form');
+        const banner = document.getElementById('form-banner');
+
+        function setError(fieldId, show) {
+            document.getElementById(fieldId).classList.toggle('invalid', show);
+        }
+
+        function validate() {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm').value;
+
+            const nameOk = name.length > 1;
+            const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            const passOk = password.length >= 6;
+            const confirmOk = confirm === password && confirm.length > 0;
+
+            setError('field-name', !nameOk);
+            setError('field-email', !emailOk);
+            setError('field-password', !passOk);
+            setError('field-confirm', !confirmOk);
+
+            return nameOk && emailOk && passOk && confirmOk;
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            banner.innerHTML = '';
+            if (!validate()) return;
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating account…';
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            const result = await Auth.register({ name, email, password });
+
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Create account';
+
+            if (result.ok) {
+                banner.innerHTML = `<div class="banner success">Account created. Redirecting…</div>`;
+                setTimeout(() => { window.location.href = 'dashboard.html'; }, 500);
+            } else {
+                banner.innerHTML = `<div class="banner error">${result.error}</div>`;
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+{
+  "users": [
+    {
+      "id": "seed-1",
+      "name": "Amara Reyes",
+      "email": "amara@example.com",
+      "passwordHash": "$2a$10$kO6Gh8tDuphegcJC3Jj0r.O1b79Ivt.f9kQii.OVsH4ZVcfov24gO"
+    }
+  ],
+  "posts": [
+    {
+      "id": "5xpv3dw3",
+      "authorId": "seed-1",
+      "authorName": "Amara Reyes",
+      "title": "Why I keep a paper notebook next to my laptop",
+      "tag": "process",
+      "body": "Screens are for editing. Paper is for thinking. I write every first draft by hand because the friction slows me down just enough to notice what I actually mean before I commit it to a file.",
+      "status": "published",
+      "createdAt": "2026-07-30T19:08:09.347Z"
+    },
+    {
+      "id": "dzl6ytgj",
+      "authorId": "seed-1",
+      "authorName": "Amara Reyes",
+      "title": "A four-day plan for shipping your first real UI",
+      "tag": "learning",
+      "body": "Most tutorials teach syntax. Almost none teach sequencing, what to build first so day two does not undo day one. Here is the order that has worked for every beginner I have mentored.",
+      "status": "published",
+      "createdAt": "2026-08-02T19:08:09.347Z"
+    },
+    {
+      "id": "1kaabqux",
+      "authorId": "seed-1",
+      "authorName": "Amara Reyes",
+      "title": "Drafted: thoughts on responsive type scales",
+      "tag": "draft",
+      "body": "Still figuring out the right clamp() values for this one, notes so far below.",
+      "status": "draft",
+      "createdAt": "2026-08-03T14:20:09.347Z"
+    }
+  ]
+}
